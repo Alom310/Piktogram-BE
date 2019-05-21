@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
-const ige = require("instagram-node").instagram();
+const ig = require("instagram-node").instagram();
 
 const userRoutes = require("./routes/user.js");
 const postRoutes = require("./routes/post");
@@ -29,8 +29,12 @@ ig.use({
     client_secret: "f77a4a4fd3c141128fcf3ded6310610d"
 });
 
-const redirecturi = "https://localhost:3000/redirect";
+const redirectUri = "https://localhost:3000/redirect";
 
+app.get('/authorize', function(req, res){
+    // set the scope of our application to be able to access likes and public content
+    res.redirect(ig.get_authorization_url(redirectUri, { scope : ['public_content','likes']}) );
+});
 
 app.listen(process.env.PORT || 3001, () =>
   console.log("Server is now running")
