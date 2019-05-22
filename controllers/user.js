@@ -3,7 +3,7 @@ const db = require("../models");
 const jwt = require("jsonwebtoken");
 
 module.exports = {
-  index: (res) => {
+  index: (req, res) => {
     db.User.find({}, (err, foundUsers) => {
       if (err) return console.error(err);
       res.json(foundUsers);
@@ -43,7 +43,8 @@ module.exports = {
                   username: req.body.username,
                   password: hash
                 },
-                (newUser) => {
+                (err, newUser) => {
+                  console.log(newUser);
                   let user = {
                     firstName: newUser.firstName,
                     lastName: newUser.lastName,
@@ -111,7 +112,7 @@ module.exports = {
               {
                 expiresIn: "1h"
               },
-              (signedJwt) => {
+              (err, signedJwt) => {
                 res.status(200).json({
                   message: "Auth Successful",
                   user,

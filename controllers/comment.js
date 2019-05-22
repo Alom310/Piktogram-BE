@@ -1,7 +1,7 @@
 const db = require("../models");
 
 module.exports = {
-  index: (res) => {
+  index: (req, res) => {
     db.Comment.find({})
       .populate("user")
       .exec((err, foundComments) => {
