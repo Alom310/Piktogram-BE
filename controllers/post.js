@@ -1,10 +1,9 @@
 const db = require("../models");
 
 module.exports = {
-  index: (res) => {
+  index: (req, res) => {
     db.Post.find({})
-      .populate("comment")
-      .populate("like")
+      .populate("comment like")
       .exec((err, foundPosts) => {
         if (err) return console.error(err);
         res.json(foundPosts);
