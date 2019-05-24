@@ -1,7 +1,7 @@
 const db = require("../models");
 
 module.exports = {
-  index: (res) => {
+  index: (req, res) => {
     db.Post.find({})
       .populate("comment")
       .populate("like")

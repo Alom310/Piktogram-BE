@@ -12,8 +12,8 @@ module.exports = {
   show: (req, res) => {
     if (req.userId) {
       db.User.findById(req.userId, (foundUser) => {
-        res.json(foundUser);
-      })
+          res.json(foundUser);
+        })
         .populate("post");
     } else {
       res.json("No user id provided");
@@ -22,7 +22,9 @@ module.exports = {
   signup: (req, res) => {
     console.log(req.body);
 
-    db.User.find({ email: req.body.email })
+    db.User.find({
+        email: req.body.email
+      })
       .exec()
       .then(user => {
         if (user.length >= 1) {
@@ -33,10 +35,11 @@ module.exports = {
           bcrypt.hash(req.body.password, 10, (err, hash) => {
             if (err) {
               console.log("Hashing error:", err);
-              res.status(200).json({ error: err });
+              res.status(200).json({
+                error: err
+              });
             } else {
-              db.User.create(
-                {
+              db.User.create({
                   firstName: req.body.firstName,
                   lastName: req.body.lastName,
                   email: req.body.email,
@@ -54,8 +57,7 @@ module.exports = {
                   };
                   jwt.sign(
                     user,
-                    "bWF0dGJyYW5kb25qb2VjaHJpc3RpbmE=",
-                    {
+                    "bWF0dGJyYW5kb25qb2VjaHJpc3RpbmE=", {
                       expiresIn: "1h"
                     },
                     (err, signedJwt) => {
@@ -74,13 +76,17 @@ module.exports = {
       })
       .catch(err => {
         console.log(err);
-        res.status(500).json({ err });
+        res.status(500).json({
+          err
+        });
       });
   },
   login: (req, res) => {
     console.log("Login called");
     console.log(req.body);
-    db.User.find({ email: req.body.email })
+    db.User.find({
+        email: req.body.email
+      })
       .select("+password")
       .exec()
       .then(users => {
@@ -95,7 +101,9 @@ module.exports = {
           console.log("checking password");
           if (err) {
             console.log(err);
-            return status(500).json({ err });
+            return status(500).json({
+              err
+            });
           }
           if (match) {
             console.log("matched");
@@ -108,8 +116,7 @@ module.exports = {
             };
             jwt.sign(
               user,
-              "bWF0dGJyYW5kb25qb2VjaHJpc3RpbmE=",
-              {
+              "bWF0dGJyYW5kb25qb2VjaHJpc3RpbmE=", {
                 expiresIn: "1h"
               },
               (err, signedJwt) => {
@@ -122,18 +129,24 @@ module.exports = {
             );
           } else {
             console.log("no match");
-            res.status(401).json({ message: "Your email or password is incorrect." });
+            res.status(401).json({
+              message: "Your email or password is incorrect."
+            });
           }
         });
       })
       .catch(err => {
-        res.status(500).json({ err });
+        res.status(500).json({
+          err
+        });
       });
   },
   delete: (req, res) => {
     console.log(req.body);
     let userId = req.body._id;
-    db.User.findOneAndDelete({ _id: userId }, (err, foundUser) => {
+    db.User.findOneAndDelete({
+      _id: userId
+    }, (err, foundUser) => {
       if (err) {
         throw err;
       }
@@ -145,10 +158,12 @@ module.exports = {
 
     console.log(userId);
 
-    db.User.findOneAndUpdate(
-      { _id: userId },
-      req.body,
-      { new: true },
+    db.User.findOneAndUpdate({
+        _id: userId
+      },
+      req.body, {
+        new: true
+      },
       (err, updatedUser) => {
         if (err) return console.log(err);
         console.log(updatedUser);
