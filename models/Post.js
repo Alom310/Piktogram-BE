@@ -3,9 +3,9 @@ const mongoose = require("mongoose");
 Schema = mongoose.Schema;
 
 const PostSchema = new Schema({
-  filePath: {
+  fileName: {
     type: String,
-    required: true
+    required: false
   },
   description: {
     type: String,
@@ -16,14 +16,29 @@ const PostSchema = new Schema({
     default: Date.now(),
     required: true
   },
-  comment: {
+  user: {
     type: Schema.Types.ObjectId,
-    ref: "Comment"
+    ref: "User"
   },
-  like: {
-    type: Schema.Types.ObjectId,
-    ref: "Like"
-  },
+  comments: [{
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: "User"
+    },
+    content: String,
+    date: {
+      type: Date,
+      default: Date.now(),
+      required: true
+    }
+  }],
+  likes: [{
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: "User"
+    },
+    like: Boolean
+  }],
 });
 
 module.exports = mongoose.model("Post", PostSchema);

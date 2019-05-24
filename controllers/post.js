@@ -1,20 +1,25 @@
 const db = require("../models");
+const multer = require('multer');
+
+
 
 module.exports = {
   index: (req, res) => {
     db.Post.find({})
       .populate("comment")
-      .populate("like")
+      .populate("post")
       .exec((err, foundPosts) => {
         if (err) return console.error(err);
         res.json(foundPosts);
       });
   },
   createPost: (req, res) => {
+console.log(req.file);
     let newPost = new db.Post({
-      filePath: req.body.filePath,
+      fileName: req.file.filename,
       description: req.body.description,
       timestamp: req.body.date,
+      user: req.body.user
     });
 
     db.Post.create(newPost, (err, newPostCreated) => {
@@ -54,5 +59,42 @@ module.exports = {
         res.json(updatedPost);
       }
     );
+  },
+
+  addComment: (req, res) => {
+    // console.log('inside comment' + res.locals.userData._id)
+    if(res.locals.userData===null){
+      res.json({'message':"invalid request"})
+    }else{
+      let postId = req.body.postId;
+      db.Post.update(
+        {_id: postId},
+        {$push: {
+          comments:{
+            userId: res.locals.userData._id,
+            content: req.body.content
+          }
+        }},
+        (err,data)=>{
+          res.json(data);
+        }
+      );
+    }
+  },
+
+  like: (req, res) => {
+    let postId = req.body.postId;
+    db.Post.update(
+      {_id: postId},
+      {$push: {
+        likes:{
+          userId: res.locals.userData._id,
+          like: req.body.like
+        }
+      }},
+      (err,data)=>{
+        res.json(data);
+      }
+    )
   }
 };
