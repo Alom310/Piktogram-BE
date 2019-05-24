@@ -28,10 +28,6 @@ const UserSchema = new Schema({
   },
   avatar: {
     type: String
-  },
-  post: {
-    type: Schema.Types.ObjectId,
-    ref: "Post"
   }
 });
 
