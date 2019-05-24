@@ -12,6 +12,7 @@ const userRoutes = require("./routes/user");
 const postRoutes = require("./routes/post");
 const commentRoutes = require("./routes/comment");
 const likeRoutes = require("./routes/like");
+const resourcesRoutes = require("./routes/resources");
 
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -26,7 +27,7 @@ app.use((req, res, next) => {
   // check the header of the req
   // console.log('inside the check')
   if (req.headers['x-token'] === undefined) {
-      console.log("there is no header");
+    console.log("there is no header");
     res.locals.userData === null;
     next();
   } else {
@@ -47,15 +48,16 @@ app.use((req, res, next) => {
 });
 
 app.get('/', (req, res) => {
-    res.send('test');
+  res.send('test');
 })
 
 app.use("/users", userRoutes);
 app.use("/posts", postRoutes);
 app.use("/likes", likeRoutes);
 app.use("/comments", commentRoutes);
+app.use("/resources", resourcesRoutes);
 
 
 app.listen(process.env.PORT || 3001, () =>
-    console.log("Server is now running")
+  console.log("Server is now running")
 );

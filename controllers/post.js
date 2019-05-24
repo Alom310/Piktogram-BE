@@ -14,7 +14,7 @@ module.exports = {
       });
   },
   createPost: (req, res) => {
-console.log(req.file);
+    console.log(req.file);
     let newPost = new db.Post({
       fileName: req.file.filename,
       description: req.body.description,
@@ -63,19 +63,21 @@ console.log(req.file);
 
   addComment: (req, res) => {
     // console.log('inside comment' + res.locals.userData._id)
-    if(res.locals.userData===null){
-      res.json({'message':"invalid request"})
-    }else{
+    if (res.locals.userData === null) {
+      res.json({ 'message': "invalid request" })
+    } else {
       let postId = req.body.postId;
       db.Post.update(
-        {_id: postId},
-        {$push: {
-          comments:{
-            userId: res.locals.userData._id,
-            content: req.body.content
+        { _id: postId },
+        {
+          $push: {
+            comments: {
+              userId: res.locals.userData._id,
+              content: req.body.content
+            }
           }
-        }},
-        (err,data)=>{
+        },
+        (err, data) => {
           res.json(data);
         }
       );
@@ -85,14 +87,16 @@ console.log(req.file);
   like: (req, res) => {
     let postId = req.body.postId;
     db.Post.update(
-      {_id: postId},
-      {$push: {
-        likes:{
-          userId: res.locals.userData._id,
-          like: req.body.like
+      { _id: postId },
+      {
+        $push: {
+          likes: {
+            userId: res.locals.userData._id,
+            like: req.body.like
+          }
         }
-      }},
-      (err,data)=>{
+      },
+      (err, data) => {
         res.json(data);
       }
     )
