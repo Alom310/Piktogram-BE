@@ -155,5 +155,22 @@ module.exports = {
         res.json(updatedUser);
       }
     );
+  },
+  search: (req, res) => {
+    let query = req.query.s;
+    let pattern = new RegExp(query, "i");
+    // db.User.find({ $text: { $search: query } }).exec((err, data) => {
+    //   if (err) { res.json({ message: err }) }
+    //   else {
+    //     res.json(data);
+    //   }
+    // })
+
+    db.User.find({ username: { $regex: pattern } }).exec((err, data) => {
+      if (err) { res.json({ message: err }) }
+      else {
+        res.json(data);
+      }
+    })
   }
 };
