@@ -38,4 +38,8 @@ UserSchema.set("toJSON", {
   }
 });
 
+UserSchema.index({
+  username: "text"
+})
+
 module.exports = mongoose.model("User", UserSchema);

@@ -3,9 +3,11 @@ const jwt = require("jsonwebtoken");
 const router = express.Router();
 const controllers = require("../controllers");
 
+router.get("/", controllers.user.index);
 router.post("/login", controllers.user.login);
 router.post("/signup", controllers.user.signup);
 router.put('/:id/update', controllers.user.update);
+router.get("/search", controllers.user.search);
 
 router.use((req, res, next) => {
   const bearerHeader = req.headers["authorization"];
@@ -24,7 +26,6 @@ router.use((req, res, next) => {
 });
 
 router.delete("/delete", controllers.user.delete);
-router.get("/", controllers.user.show);
 
 
 
