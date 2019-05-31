@@ -19,7 +19,7 @@ module.exports = {
       fileName: req.file.filename,
       description: req.body.description,
       timestamp: req.body.date,
-      user: req.body.user
+      user: res.locals.userData._id
     });
 
     db.Post.create(newPost, (err, newPostCreated) => {
