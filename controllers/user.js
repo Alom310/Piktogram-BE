@@ -9,14 +9,24 @@ module.exports = {
       res.json(foundUsers);
     });
   },
-  myProfile: (req, res) => {
+  getProfile: (req, res) => {
+    db.User.findById(req.body.user._id)
+      .populate("user").exec((err, udata) => {
+        if (err) {
+          res.json({ "message": "invalid data" });
+        } else {
+          res.json(udata);
+        }
+      })
+  },
+  getMyProfile: (req, res) => {
     if (res.locals.userData != null) {
       db.User.findById(res.locals.userData._id)
-        .populate("user").exec((err,udata)=>{
-          if(err){
-            res.json({"message":"invalid data"});
+        .populate("user").exec((err, udata) => {
+          if (err) {
+            res.json({ "message": "invalid data" });
           }
-          else{
+          else {
             res.json(udata);
           }
         })
