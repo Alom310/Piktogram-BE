@@ -56,6 +56,8 @@ module.exports = {
                   lastName: req.body.lastName,
                   email: req.body.email,
                   username: req.body.username,
+                  bio: req.body.bio,
+                  avatar: req.file.filename,
                   password: hash
                 },
                 (err, newUser) => {
@@ -65,6 +67,8 @@ module.exports = {
                     lastName: newUser.lastName,
                     email: newUser.email,
                     username: newUser.username,
+                    bio: newUser.bio,
+                    avatar: newUser.avatar,
                     _id: newUser._id
                   };
                   jwt.sign(
@@ -119,6 +123,8 @@ module.exports = {
               lastName: users[0].lastName,
               email: users[0].email,
               username: users[0].username,
+              bio: users[0].bio,
+              avatar: users[0].avatar,
               _id: users[0]._id
             };
             jwt.sign(
