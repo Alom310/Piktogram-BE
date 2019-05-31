@@ -26,15 +26,15 @@ app.use((req, res, next) => {
   // console.log('request header or x token', req.headers['x-token'])
   // check the header of the req
   // console.log('inside the check')
-  if (req.headers['x-token'] === undefined) {
+  if (req.headers['token'] === undefined) {
     console.log("there is no header");
-    res.locals.userData === null;
+    res.locals.userData = null;
     next();
   } else {
-    jwt.verify(req.headers['x-token'], 'bWF0dGJyYW5kb25qb2VjaHJpc3RpbmE=', function (err, decoded) {
+    jwt.verify(req.headers['token'], 'bWF0dGJyYW5kb25qb2VjaHJpc3RpbmE=', function (err, decoded) {
       if (err) {
         console.log('jwt verify errors')
-        res.locals.userData === null;
+        res.locals.userData = null;
         next();
       } else {
         console.log('decode here', decoded)

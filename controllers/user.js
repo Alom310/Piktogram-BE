@@ -9,12 +9,17 @@ module.exports = {
       res.json(foundUsers);
     });
   },
-  show: (req, res) => {
-    if (req.userId) {
-      db.User.findById(req.userId, (foundUser) => {
-        res.json(foundUser);
-      })
-        .populate("post");
+  myProfile: (req, res) => {
+    if (res.locals.userData != null) {
+      db.User.findById(res.locals.userData._id)
+        .populate("user").exec((err,udata)=>{
+          if(err){
+            res.json({"message":"invalid data"});
+          }
+          else{
+            res.json(udata);
+          }
+        })
     } else {
       res.json("No user id provided");
     }

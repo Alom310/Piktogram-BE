@@ -8,6 +8,8 @@ router.post("/login", controllers.user.login);
 router.post("/signup", controllers.user.signup);
 router.put('/:id/update', controllers.user.update);
 router.get("/search", controllers.user.search);
+router.get("/myprofile", controllers.user.myProfile);
+// router.get("/profile", controllers.user.profile);
 
 router.use((req, res, next) => {
   const bearerHeader = req.headers["authorization"];

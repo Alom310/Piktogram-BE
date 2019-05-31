@@ -28,7 +28,15 @@ const UserSchema = new Schema({
   },
   avatar: {
     type: String
-  }
+  },
+  following: [{
+    type: Schema.Types.ObjectId,
+    ref: "User"
+  }],
+  followers: [{
+    type: Schema.Types.ObjectId,
+    ref: "User"
+  }]
 });
 
 UserSchema.set("toJSON", {
