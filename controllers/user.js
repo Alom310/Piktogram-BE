@@ -9,6 +9,18 @@ module.exports = {
       res.json(foundUsers);
     });
   },
+  follow: (req, res) => {
+    let userId = req.params.id;
+    db.User.findOneAndUpdate(
+      { _id: userId },
+      req.body,
+      { new: true },
+      (err, updatedUser) => {
+        if (err) return console.log(err);
+        res.json(updatedUser);
+      }
+    );
+  },
   getProfile: (req, res) => {
     db.User.findById(req.body.user._id)
       .populate("user").exec((err, udata) => {
