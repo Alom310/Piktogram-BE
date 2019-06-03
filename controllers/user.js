@@ -9,14 +9,36 @@ module.exports = {
       res.json(foundUsers);
     });
   },
-  myProfile: (req, res) => {
+  follow: (req, res) => {
+    let userId = req.params.id;
+    db.User.findOneAndUpdate(
+      { _id: userId },
+      req.body,
+      { new: true },
+      (err, updatedUser) => {
+        if (err) return console.log(err);
+        res.json(updatedUser);
+      }
+    );
+  },
+  getProfile: (req, res) => {
+    db.User.findById(req.body.user._id)
+      .populate("user").exec((err, udata) => {
+        if (err) {
+          res.json({ "message": "invalid data" });
+        } else {
+          res.json(udata);
+        }
+      })
+  },
+  getMyProfile: (req, res) => {
     if (res.locals.userData != null) {
       db.User.findById(res.locals.userData._id)
-        .populate("user").exec((err,udata)=>{
-          if(err){
-            res.json({"message":"invalid data"});
+        .populate("user").exec((err, udata) => {
+          if (err) {
+            res.json({ "message": "invalid data" });
           }
-          else{
+          else {
             res.json(udata);
           }
         })
@@ -49,6 +71,8 @@ module.exports = {
                   lastName: req.body.lastName,
                   email: req.body.email,
                   username: req.body.username,
+                  bio: req.body.bio,
+                  avatar: req.file.filename,
                   password: hash
                 },
                 (err, newUser) => {
@@ -58,6 +82,8 @@ module.exports = {
                     lastName: newUser.lastName,
                     email: newUser.email,
                     username: newUser.username,
+                    bio: newUser.bio,
+                    avatar: newUser.avatar,
                     _id: newUser._id
                   };
                   jwt.sign(
@@ -117,6 +143,8 @@ module.exports = {
               lastName: users[0].lastName,
               email: users[0].email,
               username: users[0].username,
+              bio: users[0].bio,
+              avatar: users[0].avatar,
               _id: users[0]._id
             };
             jwt.sign(

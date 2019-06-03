@@ -2,14 +2,28 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
 const controllers = require("../controllers");
+const multer = require('multer');
+const uid = require('uid');
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/');
+  },
+  filename: function (req, file, cb) {
+    let ext = file.originalname.substr(file.originalname.lastIndexOf('.') + 1);
+    cb(null, uid(10) + '.' + ext);
+  }
+})
+const upload = multer({ storage: storage });
 
 router.get("/", controllers.user.index);
 router.post("/login", controllers.user.login);
-router.post("/signup", controllers.user.signup);
+router.post("/signup", upload.single('image'), controllers.user.signup);
 router.put('/:id/update', controllers.user.update);
 router.get("/search", controllers.user.search);
-router.get("/myprofile", controllers.user.myProfile);
-// router.get("/profile", controllers.user.profile);
+router.get("/myprofile", controllers.user.getMyProfile);
+router.get("/profile", controllers.user.getProfile);
+router.put("/:id/follow", controllers.user.follow);
 
 router.use((req, res, next) => {
   const bearerHeader = req.headers["authorization"];
