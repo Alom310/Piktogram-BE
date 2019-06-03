@@ -10,16 +10,40 @@ module.exports = {
     });
   },
   follow: (req, res) => {
-    let userId = req.params.id;
-    db.User.findOneAndUpdate(
-      { _id: userId },
-      req.body,
-      { new: true },
-      (err, updatedUser) => {
-        if (err) return console.log(err);
-        res.json(updatedUser);
-      }
-    );
+    if (req.params.id.followers.includes(res.locals.userData._id) === false) {
+      db.User.findByIdAndUpdate(req.params.id,
+        {
+          $push: {
+            followers: res.locals.userData._id,
+          }
+        },
+        { safe: true, upsert: true },
+        function (err, doc) {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log(doc);
+          }
+        }
+      );
+    }
+    if (!res.locals.userData._id.following.includes(req.params.id) === false) {
+      db.User.findByIdAndUpdate(res.locals.userData._id,
+        {
+          $push: {
+            following: req.params.id,
+          }
+        },
+        { safe: true, upsert: true },
+        function (err, doc) {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log(doc);
+          }
+        }
+      );
+    }
   },
   getProfile: (req, res) => {
     db.User.findById(req.body.user._id)
@@ -32,6 +56,7 @@ module.exports = {
       })
   },
   getMyProfile: (req, res) => {
+    console.log(res.locals.userData);
     if (res.locals.userData != null) {
       db.User.findById(res.locals.userData._id)
         .populate("user").exec((err, udata) => {
