@@ -23,6 +23,7 @@ router.put('/:id/update', controllers.user.update);
 router.get("/search", controllers.user.search);
 router.get("/myprofile", controllers.user.getMyProfile);
 router.get("/profile", controllers.user.getProfile);
+router.put("/:id/follow", controllers.user.follow);
 
 router.use((req, res, next) => {
   const bearerHeader = req.headers["authorization"];

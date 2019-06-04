@@ -13,7 +13,7 @@ module.exports = {
   createComment: (req, res) => {
     let newComment = new db.Comment({
       content: req.body.content,
-      user: req.body.user,
+      user: res.locals.userData._id,
       timestamp: req.body.date
     });
     db.Comment.create(newComment, (err, newCommentCreated) => {
