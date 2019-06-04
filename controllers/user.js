@@ -10,7 +10,8 @@ module.exports = {
     });
   },
   follow: (req, res) => {
-    if (req.params.id.followers.includes(res.locals.userData._id) === false) {
+    console.log("followers" + req.params.id.followers);
+    if (req.params.id.followers === undefined || req.params.id.followers.includes(res.locals.userData._id) === false) {
       db.User.findByIdAndUpdate(req.params.id,
         {
           $push: {
@@ -27,7 +28,7 @@ module.exports = {
         }
       );
     }
-    if (!res.locals.userData._id.following.includes(req.params.id) === false) {
+    if (res.locals.userData._id.following === undefined || res.locals.userData._id.following.includes(req.params.id) === false) {
       db.User.findByIdAndUpdate(res.locals.userData._id,
         {
           $push: {
