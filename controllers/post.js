@@ -8,6 +8,7 @@ module.exports = {
     db.Post.find({})
       .populate("comment")
       .populate("post")
+      .populate('user')
       .exec((err, foundPosts) => {
         if (err) return console.error(err);
         res.json(foundPosts);
@@ -30,7 +31,9 @@ module.exports = {
 
   deletePost: (req, res) => {
     let postId = req.params.id;
-    db.Post.findOneAndDelete({ _id: postId }, (err, foundPost) => {
+    db.Post.findOneAndDelete({
+      _id: postId
+    }, (err, foundPost) => {
       if (err) return console.log(err);
       console.log(foundPost);
       res.json(foundPost);
@@ -39,7 +42,9 @@ module.exports = {
 
   getOnePost: (req, res) => {
     let postId = req.params.id;
-    db.Post.findOne({ _id: postId }, (err, foundPost) => {
+    db.Post.findOne({
+      _id: postId
+    }, (err, foundPost) => {
       if (err) return console.log(err);
       console.log(foundPost);
       res.json(foundPost);
@@ -49,10 +54,12 @@ module.exports = {
   updatePost: (req, res) => {
     let postId = req.params.id;
     console.log(postId);
-    db.Post.findOneAndUpdate(
-      { _id: postId },
-      req.body,
-      { new: true },
+    db.Post.findOneAndUpdate({
+        _id: postId
+      },
+      req.body, {
+        new: true
+      },
       (err, updatedPost) => {
         if (err) return console.log(err);
         console.log(updatedPost);
@@ -64,12 +71,14 @@ module.exports = {
   addComment: (req, res) => {
     // console.log('inside comment' + res.locals.userData._id)
     if (res.locals.userData === null) {
-      res.json({ 'message': "invalid request" })
+      res.json({
+        'message': "invalid request"
+      })
     } else {
       let postId = req.body.postId;
-      db.Post.update(
-        { _id: postId },
-        {
+      db.Post.update({
+          _id: postId
+        }, {
           $push: {
             comments: {
               userId: res.locals.userData._id,
@@ -86,9 +95,9 @@ module.exports = {
 
   like: (req, res) => {
     let postId = req.body.postId;
-    db.Post.update(
-      { _id: postId },
-      {
+    db.Post.update({
+        _id: postId
+      }, {
         $push: {
           likes: {
             userId: res.locals.userData._id,

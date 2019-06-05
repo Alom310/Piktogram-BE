@@ -25,7 +25,9 @@ module.exports = {
   deleteComment: (req, res) => {
     let commentId = req.params.id;
     console.log(commentId)
-    db.Comment.findOneAndDelete({ _id: commentId }, (err, foundComment) => {
+    db.Comment.findOneAndDelete({
+      _id: commentId
+    }, (err, foundComment) => {
       if (err) return console.log(err);
       console.log(foundComment);
       res.json(foundComment);
@@ -34,10 +36,12 @@ module.exports = {
   updateComment: (req, res) => {
     let commentId = req.body._id;
     console.log(commentId);
-    db.Comment.findOneAndUpdate(
-      { _id: commentId },
-      req.body,
-      { new: true },
+    db.Comment.findOneAndUpdate({
+        _id: commentId
+      },
+      req.body, {
+        new: true
+      },
       (err, updatedComment) => {
         if (err) return console.log(err);
         console.log(updatedComment);

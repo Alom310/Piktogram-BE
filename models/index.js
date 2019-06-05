@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/piktogram',
-  { useNewUrlParser: true })
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/piktogram', {
+  useNewUrlParser: true
+})
 
 module.exports = {
   User: require("./User"),

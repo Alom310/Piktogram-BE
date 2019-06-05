@@ -11,10 +11,12 @@ module.exports = {
   },
   follow: (req, res) => {
     let userId = req.params.id;
-    db.User.findOneAndUpdate(
-      { _id: userId },
-      req.body,
-      { new: true },
+    db.User.findOneAndUpdate({
+        _id: userId
+      },
+      req.body, {
+        new: true
+      },
       (err, updatedUser) => {
         if (err) return console.log(err);
         res.json(updatedUser);
@@ -25,7 +27,9 @@ module.exports = {
     db.User.findById(req.body.user._id)
       .populate("user").exec((err, udata) => {
         if (err) {
-          res.json({ "message": "invalid data" });
+          res.json({
+            "message": "invalid data"
+          });
         } else {
           res.json(udata);
         }
@@ -36,9 +40,10 @@ module.exports = {
       db.User.findById(res.locals.userData._id)
         .populate("user").exec((err, udata) => {
           if (err) {
-            res.json({ "message": "invalid data" });
-          }
-          else {
+            res.json({
+              "message": "invalid data"
+            });
+          } else {
             res.json(udata);
           }
         })
@@ -214,9 +219,16 @@ module.exports = {
     //   }
     // })
 
-    db.User.find({ username: { $regex: pattern } }).exec((err, data) => {
-      if (err) { res.json({ message: err }) }
-      else {
+    db.User.find({
+      username: {
+        $regex: pattern
+      }
+    }).exec((err, data) => {
+      if (err) {
+        res.json({
+          message: err
+        })
+      } else {
         res.json(data);
       }
     })
