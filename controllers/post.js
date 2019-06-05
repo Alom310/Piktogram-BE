@@ -87,6 +87,7 @@ module.exports = {
   addComment: (req, res) => {
     console.log('inside comment' + res.locals.userData._id)
     console.log(req.body);
+    console.log('username' + res.locals.userData.username);
     if (res.locals.userData === null) {
       res.json({ 'message': "invalid request" })
     } else {
@@ -95,6 +96,7 @@ module.exports = {
           $push: {
             comments: {
               userId: res.locals.userData._id,
+              username: res.locals.userData.username,
               content: req.body.content
             }
           }
