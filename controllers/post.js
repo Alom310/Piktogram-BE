@@ -61,29 +61,6 @@ module.exports = {
       }
     );
   },
-
-  // addComment: (req, res) => {
-  //   console.log('inside comment' + res.locals.userData._id)
-  //   if (res.locals.userData === null) {
-  //     res.json({ 'message': "invalid request" })
-  //   } else {
-  //     let postId = req.body.postId;
-  //     db.Post.update(
-  //       { _id: postId },
-  //       {
-  //         $push: {
-  //           comments: {
-  //             userId: res.locals.userData._id,
-  //             content: req.body.content
-  //           }
-  //         }
-  //       },
-  //       (err, data) => {
-  //         res.json(data);
-  //       }
-  //     );
-  //   }
-  // },
   addComment: (req, res) => {
     console.log('inside comment' + res.locals.userData._id)
     console.log(req.body);
