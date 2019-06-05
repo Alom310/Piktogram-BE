@@ -8,6 +8,7 @@ module.exports = {
     db.Post.find({})
       .populate("comment")
       .populate("post")
+      .populate("user")
       .exec((err, foundPosts) => {
         if (err) return console.error(err);
         res.json(foundPosts);
