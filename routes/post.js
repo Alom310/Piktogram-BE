@@ -6,23 +6,23 @@ const multer = require('multer');
 const uid = require('uid');
 
 const storage = multer.diskStorage({
-  destination:function(req,file,cb) {
-    cb(null,'uploads/');
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/');
   },
-  filename: function(req,file,cb){
-    let ext =  file.originalname.substr(file.originalname.lastIndexOf('.')+1);
-    cb(null,uid(10)+'.'+ext);
+  filename: function (req, file, cb) {
+    let ext = file.originalname.substr(file.originalname.lastIndexOf('.') + 1);
+    cb(null, uid(10) + '.' + ext);
   }
 })
-const upload =  multer({storage:storage});
+const upload = multer({ storage: storage });
 
 router.get("/", controllers.post.index);
 router.get("/:id", controllers.post.getOnePost);
-router.post("/createpost",upload.single('image'), controllers.post.createPost);
+router.post("/createpost", upload.single('image'), controllers.post.createPost);
 router.delete("/:id/deletepost", controllers.post.deletePost);
 
 router.put("/:id/updatepost", controllers.post.updatePost);
-router.put("/addcomment", controllers.post.addComment);
+router.put("/:id/addcomment", controllers.post.addComment);
 // router.put("/addcomment", (req,res)=>{
 //   console.log('xxxxxxxx')
 // });

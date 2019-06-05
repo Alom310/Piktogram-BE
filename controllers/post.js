@@ -61,14 +61,35 @@ module.exports = {
     );
   },
 
+  // addComment: (req, res) => {
+  //   console.log('inside comment' + res.locals.userData._id)
+  //   if (res.locals.userData === null) {
+  //     res.json({ 'message': "invalid request" })
+  //   } else {
+  //     let postId = req.body.postId;
+  //     db.Post.update(
+  //       { _id: postId },
+  //       {
+  //         $push: {
+  //           comments: {
+  //             userId: res.locals.userData._id,
+  //             content: req.body.content
+  //           }
+  //         }
+  //       },
+  //       (err, data) => {
+  //         res.json(data);
+  //       }
+  //     );
+  //   }
+  // },
   addComment: (req, res) => {
-    // console.log('inside comment' + res.locals.userData._id)
+    console.log('inside comment' + res.locals.userData._id)
+    console.log(req.body);
     if (res.locals.userData === null) {
       res.json({ 'message': "invalid request" })
     } else {
-      let postId = req.body.postId;
-      db.Post.update(
-        { _id: postId },
+      db.Post.findByIdAndUpdate(req.params.id,
         {
           $push: {
             comments: {
@@ -77,8 +98,13 @@ module.exports = {
             }
           }
         },
-        (err, data) => {
-          res.json(data);
+        { safe: true, upsert: true },
+        function (err, doc) {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log(doc);
+          }
         }
       );
     }
