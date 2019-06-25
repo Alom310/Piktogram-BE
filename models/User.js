@@ -33,13 +33,25 @@ const UserSchema = new Schema({
   bio: {
     type: String
   },
+  // following: [{
+  //   type: Schema.Types.ObjectId,
+  //   ref: "User"
+  // }],
+  // followers: [{
+  //   type: Schema.Types.ObjectId,
+  //   ref: "User"
+  // }]
   following: [{
-    type: Schema.Types.ObjectId,
-    ref: "User"
+    username: {
+      type: String,
+      ref: "User"
+    }
   }],
   followers: [{
-    type: Schema.Types.ObjectId,
-    ref: "User"
+    username: {
+      type: String,
+      ref: "User"
+    }
   }]
 });
 

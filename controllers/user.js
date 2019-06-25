@@ -10,12 +10,18 @@ module.exports = {
     });
   },
   follow: (req, res) => {
-    console.log("followers" + req.params.id.followers);
-    if (req.params.id.followers === undefined || req.params.id.followers.includes(res.locals.userData._id) === false) {
-      db.User.findByIdAndUpdate(req.params.id,
+    let isInFollowers = false;
+    for (let i = 0; i < req.body.followers.length; i++) {
+      if (req.body.followers[i].username === res.locals.userData.username) {
+        isInFollowers = true;
+        console.log("this user is already in your followers list");
+      }
+    }
+    if (req.body.followers.length === 0 || isInFollowers === false) {
+      db.User.findOneAndUpdate({ _id: req.params.id },
         {
           $push: {
-            followers: res.locals.userData._id,
+            followers: { username: res.locals.userData.username }
           }
         },
         { safe: true, upsert: true },
@@ -27,12 +33,10 @@ module.exports = {
           }
         }
       );
-    }
-    if (res.locals.userData._id.following === undefined || res.locals.userData._id.following.includes(req.params.id) === false) {
-      db.User.findByIdAndUpdate(res.locals.userData._id,
+      db.User.findOneAndUpdate({ _id: res.locals.userData._id },
         {
           $push: {
-            following: req.params.id,
+            following: { username: req.body.username }
           }
         },
         { safe: true, upsert: true },
@@ -52,6 +56,7 @@ module.exports = {
         if (err) {
           res.json({ "message": "invalid data" });
         } else {
+          console.log("userdata" + udata);
           res.json(udata);
         }
       })
@@ -96,6 +101,8 @@ module.exports = {
                   username: req.body.username,
                   bio: req.body.bio,
                   avatar: req.file.filename,
+                  following: [],
+                  followers: [],
                   password: hash
                 },
                 (err, newUser) => {
@@ -107,6 +114,8 @@ module.exports = {
                     username: newUser.username,
                     bio: newUser.bio,
                     avatar: newUser.avatar,
+                    following: newUser.following,
+                    followers: newUser.followers,
                     _id: newUser._id
                   };
                   jwt.sign(
@@ -163,6 +172,8 @@ module.exports = {
               username: users[0].username,
               bio: users[0].bio,
               avatar: users[0].avatar,
+              following: users[0].following,
+              followers: users[0].followers,
               _id: users[0]._id
             };
             jwt.sign(
