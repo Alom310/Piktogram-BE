@@ -51,7 +51,7 @@ module.exports = {
     }
   },
   getProfile: (req, res) => {
-    db.User.findById(req.body.user._id)
+    db.User.findOne({ username: req.body.username })
       .populate("user").exec((err, udata) => {
         if (err) {
           res.json({ "message": "invalid data" });
@@ -61,6 +61,17 @@ module.exports = {
         }
       })
   },
+  // getProfile: (req, res) => {
+  //   db.User.findById(req.body.user._id)
+  //     .populate("user").exec((err, udata) => {
+  //       if (err) {
+  //         res.json({ "message": "invalid data" });
+  //       } else {
+  //         console.log("userdata" + udata);
+  //         res.json(udata);
+  //       }
+  //     })
+  // },
   getMyProfile: (req, res) => {
     console.log(res.locals.userData);
     if (res.locals.userData != null) {
