@@ -1,6 +1,6 @@
 const db = require("../models");
 const multer = require('multer');
-
+const cloudinary = require('cloudinary');
 
 
 module.exports = {
@@ -15,18 +15,38 @@ module.exports = {
       });
   },
   createPost: (req, res) => {
-    console.log(req.file);
-    let newPost = new db.Post({
-      fileName: req.file.filename,
-      description: req.body.description,
-      timestamp: req.body.date,
-      user: res.locals.userData._id
-    });
+    cloudinary.uploader.upload(req.file.path, function (result) {
+      // add cloudinary url for the image to the image object under image property
+      req.body.image = result.secure_url;
+      // add user to image
+      // req.body.user = res.locals.userData._id;
 
-    db.Post.create(newPost, (err, newPostCreated) => {
-      if (err) return console.log(err);
-      res.json(newPostCreated);
+      let newPost = new db.Post({
+        fileName: req.body.image,
+        description: req.body.description,
+        timestamp: req.body.date,
+        user: res.locals.userData._id
+      });
+
+      db.Post.create(newPost, (err, newPostCreated) => {
+        if (err) return console.log(err);
+        res.json(newPostCreated);
+      });
     });
+    ///////////// ORIGINAL FUNCTION////////////
+    // console.log(req.file);
+    // let newPost = new db.Post({
+    //   fileName: req.file.filename,
+    //   description: req.body.description,
+    //   timestamp: req.body.date,
+    //   user: res.locals.userData._id
+    // });
+
+    // db.Post.create(newPost, (err, newPostCreated) => {
+    //   if (err) return console.log(err);
+    //   res.json(newPostCreated);
+    // });
+    /////////////////////////////////////////////
   },
 
   deletePost: (req, res) => {

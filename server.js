@@ -5,7 +5,7 @@ const app = express();
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const path = require('path')
-
+require('dotenv').config()
 
 
 
@@ -49,7 +49,7 @@ app.use((req, res, next) => {
 });
 
 app.get('/', (req, res) => {
-  res.sendfile(path.join(__dirname,'./public/build/index.html'));
+  res.sendfile(path.join(__dirname, './public/build/index.html'));
 })
 
 app.use("/users", userRoutes);

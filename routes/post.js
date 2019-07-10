@@ -5,16 +5,39 @@ const controllers = require("../controllers");
 const multer = require('multer');
 const uid = require('uid');
 
+// ORIGINAL FILE UPLOAD///////////////////
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, 'uploads/');
+//   },
+//   filename: function (req, file, cb) {
+//     let ext = file.originalname.substr(file.originalname.lastIndexOf('.') + 1);
+//     cb(null, uid(10) + '.' + ext);
+//   }
+// })
+// const upload = multer({ storage: storage });
+/////////////////////////////////////////////
+
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/');
-  },
-  filename: function (req, file, cb) {
-    let ext = file.originalname.substr(file.originalname.lastIndexOf('.') + 1);
-    cb(null, uid(10) + '.' + ext);
+  filename: function (req, file, callback) {
+    callback(null, Date.now() + file.originalname);
   }
-})
-const upload = multer({ storage: storage });
+});
+const imageFilter = function (req, file, cb) {
+  // accept image files only
+  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+    return cb(new Error('Only image files are allowed!'), false);
+  }
+  cb(null, true);
+};
+const upload = multer({ storage: storage, fileFilter: imageFilter })
+
+const cloudinary = require('cloudinary');
+cloudinary.config({
+  cloud_name: 'josephlbaker',
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 router.get("/", controllers.post.index);
 router.get("/:id", controllers.post.getOnePost);
