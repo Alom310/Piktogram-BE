@@ -48,8 +48,13 @@ app.use((req, res, next) => {
 
 });
 
+// app.get('/', (req, res) => {
+//   res.sendFile(path.join(__dirname, './public/build/index.html'));
+// })
+
+
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, './public/build/index.html'));
+  res.sendFile(path.join(__dirname, '../public'));
 })
 
 app.use("/users", userRoutes);
