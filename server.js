@@ -63,4 +63,4 @@ app.listen(process.env.PORT || 3001, () =>
   console.log("Server is now running")
 );
 
-server.timeout = 1000;
+app.timeout = 1000;
